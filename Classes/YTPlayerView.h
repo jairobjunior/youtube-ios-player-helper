@@ -635,4 +635,15 @@ typedef enum {
  */
 - (int)playlistIndex;
 
+
+/**
+ * Sets the size in pixels of the <iframe> that contains the player.
+ * This method corresponds to the JavaScript API defined here:
+ *   https://developers.google.com/youtube/iframe_api_reference#setSize
+ *
+ * @param Width of the iframe.
+ * @param height of the iframe.
+ */
+- (void)setSizeWithWidth:(int)width andHeight:(int)height;
+
 @end
