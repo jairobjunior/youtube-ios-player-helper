@@ -99,6 +99,16 @@ static NSString *YTPlayerParamHeight = @"100%";
     [self stringFromEvaluatingJavaScript:@"player.stopVideo();"];
 }
 
+- (void)mute
+{
+    [self stringFromEvaluatingJavaScript:@"player.mute();"];
+}
+
+- (void)unMute
+{
+    [self stringFromEvaluatingJavaScript:@"player.unMute();"];
+}
+
 - (void)seekToSeconds:(float)seekToSeconds allowSeekAhead:(BOOL)allowSeekAhead {
     NSNumber *secondsValue = [NSNumber numberWithFloat:seekToSeconds];
     NSString *allowSeekAheadValue = [self stringForJSBoolean:allowSeekAhead];

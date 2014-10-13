@@ -207,6 +207,20 @@ typedef enum {
 - (void)stopVideo;
 
 /**
+ * Mutes the player. Corresponds to this method from
+ * the JavaScript API:
+ *   https://developers.google.com/youtube/iframe_api_reference#mute
+ */
+- (void)mute;
+
+/**
+ * Unmutes the player. Corresponds to this method from
+ * the JavaScript API:
+ *   https://developers.google.com/youtube/iframe_api_reference#mute
+ */
+- (void)unMute;
+
+/**
  * Seek to a given time on a playing video. Corresponds to this method from
  * the JavaScript API:
  *   https://developers.google.com/youtube/iframe_api_reference#seekTo
