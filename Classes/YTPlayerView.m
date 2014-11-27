@@ -52,8 +52,8 @@ NSString static *const kYTPlayerCallbackOnYouTubeIframeAPIReady = @"onYouTubeIfr
 
 NSString static *const kYTPlayerEmbedUrlRegexPattern = @"^http(s)://(www.)youtube.com/embed/(.*)$";
 
-static NSString *YTPlayerParamWidth = @"100%";
-static NSString *YTPlayerParamHeight = @"100%";
+static NSString *YTPlayerParamWidth = @"320px";
+static NSString *YTPlayerParamHeight = @"180px";
 
 @implementation YTPlayerView
 
@@ -69,7 +69,7 @@ static NSString *YTPlayerParamHeight = @"100%";
     if (!playerVars) {
         playerVars = @{};
     }
-    NSDictionary *playerParams = @{ @"videoId" : videoId, @"playerVars" : playerVars };
+    NSDictionary *playerParams = @{ @"videoId" : videoId, @"playerVars" : playerVars, @"suggestedQuality" : kYTPlaybackQualityMediumQuality };
     return [self loadWithPlayerParams:playerParams];
 }
 
@@ -301,9 +301,6 @@ static NSString *YTPlayerParamHeight = @"100%";
 
 - (void)setSizeWithWidth:(int)width andHeight:(int)height
 {
-    YTPlayerParamWidth = [NSString stringWithFormat:@"%dpx", width];
-    YTPlayerParamHeight = [NSString stringWithFormat:@"%dpx", height];
-    
     NSString *command = [NSString stringWithFormat:@"player.setSize(%d,%d);", width, height];
     [self stringFromEvaluatingJavaScript:command];
 }
@@ -653,12 +650,12 @@ shouldStartLoadWithRequest:(NSURLRequest *)request
                                                 inDirectory:@"Assets"];
     NSString *embedHTMLTemplate =
     [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
-    
+
     if (error) {
         NSLog(@"Received error rendering template: %@", error);
         return NO;
     }
-    
+
     // Render the playerVars as a JSON dictionary.
     NSError *jsonRenderingError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:playerParams
@@ -670,11 +667,14 @@ shouldStartLoadWithRequest:(NSURLRequest *)request
               jsonRenderingError);
         return NO;
     }
-    
+
     NSString *playerVarsJsonString =
     [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    
+
     NSString *embedHTML = [NSString stringWithFormat:embedHTMLTemplate, playerVarsJsonString];
+
+    NSLog(@"%@", embedHTML);
+
     [self.webView loadHTMLString:embedHTML baseURL:[NSURL URLWithString:@"about:blank"]];
     [self.webView setDelegate:self];
     self.webView.allowsInlineMediaPlayback = YES;
